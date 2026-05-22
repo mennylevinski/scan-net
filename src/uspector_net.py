@@ -19,6 +19,7 @@ import platform
 import socket
 import logging
 import datetime
+import warnings
 import requests
 import ipaddress
 import subprocess
@@ -26,10 +27,10 @@ import concurrent.futures
 import threading
 import itertools
 import psutil
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 from typing import List, Dict, Iterable, Optional
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
 version = "1.6.0"
 
