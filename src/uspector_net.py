@@ -27,7 +27,7 @@ import itertools
 import psutil
 from typing import List, Dict, Iterable, Optional
 
-version = "1.5.0"
+version = "1.6.0"
 
 log_buffer = io.StringIO()
 now = datetime.datetime.now().replace(microsecond=0)
@@ -889,27 +889,44 @@ def _ip_range_from_full_ips(start_ip: str, end_ip: str) -> List[str]:
     return [str(ipaddress.IPv4Address(int(a) + i)) for i in range(size)]
 
 # ---- Main scan loop ----
-while True:
-    print("\nSelect scan type:")
-    print("1. LAN scanning")
-    print("2. Custom IP range")
-    print("3. Traffic Inspection")
-    print("4. Exit")
-    scan_mode = input("\nEnter choice (1-4): ").strip()
+def show_menu():
+    title = "Mod commands (case-insensitive):"
+    print("\n" + title)
 
-    if scan_mode not in {"1", "2", "3", "4"}:
-        print("Invalid choice!")
+    print(f"{'scan -L':10} LAN scanning")
+    print(f"{'scan -R':10} Custom IP range")
+    print(f"{'scan -T':10} Traffic Inspection")
+    print(f"{'help':10} Show this menu")
+    print(f"{'exit':10} Exit the program")
+    
+show_menu()
+
+while True:
+    scan_mode = input("\n> ").strip().lower()
+
+    if scan_mode not in {"scan -l", "scan -r", "scan -t", "help", "exit", ""}:
+        print("Invalid command!")
         continue
 
-    if scan_mode == "1":
+    elif scan_mode == "":
+        continue
+
+    elif scan_mode == "help":
+        show_menu()
+        continue
+
+    elif scan_mode == "exit":
+        input("\nGoodbye! Press Enter to exit...")
+        sys.exit(0)
+            
+    if scan_mode == "scan -l":
         choice = input("\nStart full LAN scan? (Y/N): ").strip().upper()
         if choice not in ("Y", "N"):
             print("Invalid choice!")
             continue
         if choice != "Y":
             print("LAN scan cancelled.")
-            input("Press Enter to exit...")
-            break
+            continue
 
         spinner = Spinner("Running LAN scan")
         spinner.start()
@@ -927,7 +944,7 @@ while True:
             elapsed = time.time() - start
             logging.info(f"LAN scan finished in {elapsed:.1f}s")
 
-    elif scan_mode == "2":
+    elif scan_mode == "scan -r":
         print("\nCustom scan options:")
         print("Format options:")
         print(" - Single IP (example: 1.1.1.1)")
@@ -1009,7 +1026,7 @@ while True:
             else:
                 print(f"Custom scan finished in {elapsed:.1f}s - No devices found.")
 
-    elif scan_mode == "3":
+    elif scan_mode == "scan -t":
         # --- Ask for timeout ---
         try:
             timeout = int(input("\nSelect timeout (10-300 seconds, 0 = unlimited): ").strip())
@@ -1042,10 +1059,6 @@ while True:
             stop_event.set()
             thread.join()
         
-    elif scan_mode == "4":
-        input("\nGoodbye! Press Enter to exit...")
-        sys.exit(0)
-
     export = input("\nExport logs to text file? (Y to export, Enter to skip): ").strip().lower()
     if export == "y":
         # Generate timestamp for filename
