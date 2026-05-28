@@ -899,7 +899,7 @@ def show_menu():
 
     print(f"{'scan -L':10} LAN scanning")
     print(f"{'scan -R':10} Custom IP range")
-    print(f"{'scan -T':10} Traffic Inspection")
+    print(f"{'scan -T':10} Traffic inspection")
     print(f"{'help':10} Show this menu")
     print(f"{'exit':10} Exit the program")
     
