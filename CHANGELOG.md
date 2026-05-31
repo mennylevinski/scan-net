@@ -3,7 +3,15 @@ All notable changes to **Uspector Network Scanner** are documented in this file.
 
 ---
 
-## [1.6.0] – 2026-05-23 Latest
+## [1.7.0] – 2026-05-31 Latest
+### Added
+- Added HTTP service scanner for local network (scan -S)
+- Improved CLI menu layout and usability
+- Windows executable is now digitally signed 
+
+---
+
+## [1.6.0] – 2026-05-23
 ### Added
 - Replaced numeric menu with command-based CLI interface (scan -L, scan -R, scan -T, help, exit)
 - Enhanced custom range scan performance by integrating ARP and ICMP-based filtering
