@@ -32,7 +32,18 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from typing import List, Dict, Iterable, Optional
 
-version = "1.7.0"
+version = "1.8.0"
+
+try:
+    from VersionChecker import fetch_latest_version
+
+    fetch_latest_version(version)
+
+except ImportError:
+    pass
+
+except Exception as e:
+    pass
 
 log_buffer = io.StringIO()
 now = datetime.datetime.now().replace(microsecond=0)
@@ -776,6 +787,149 @@ def start_connection_inspector(
     thread.start()
     return stop_event, thread
 
+# ======= SMB Scanner =======
+def smb_detect(ip: str, timeout: float = 0.5) -> bool:
+    """
+    Quick SMB availability check (no auth, no exploitation).
+    """
+    ports = [445, 139]
+
+    for port in ports:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(timeout)
+
+                if s.connect_ex((ip, port)) == 0:
+                    return True
+
+        except Exception:
+            pass
+
+    return False
+
+def smb_probe_shares(ip: str):
+    """
+    Safe SMB share enumeration using Windows 'net view'.
+
+    No authentication.
+    No exploitation.
+
+    Returns:
+    {
+        "anonymous": bool,
+        "shares": [share1, share2, ...]
+    }
+    """
+
+    try:
+        import subprocess
+
+        result = subprocess.run(
+            ["net", "view", f"\\\\{ip}"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+
+        if result.returncode != 0:
+            return {
+                "anonymous": False,
+                "shares": []
+            }
+
+        shares = []
+
+        for line in result.stdout.splitlines():
+
+            line = line.strip()
+
+            if (
+                not line
+                or "Share name" in line
+                or "The command completed" in line
+                or line.startswith("---")
+            ):
+                continue
+
+            parts = line.split()
+
+            if not parts:
+                continue
+
+            share_name = parts[0]
+
+            # Skip hidden/admin shares
+            if share_name.endswith("$"):
+                continue
+
+            shares.append(share_name)
+
+        return {
+            "anonymous": True,
+            "shares": shares
+        }
+
+    except Exception:
+        pass
+
+    return {
+        "anonymous": False,
+        "shares": []
+    }
+
+def smb_scan(subnet, local_ip=None, timeout: float = 0.3):
+    """
+    Scan subnet for SMB-capable devices.
+
+    Lightweight.
+    No authentication.
+    No exploitation.
+    """
+
+    if not subnet:
+        print("No subnet provided.")
+        return []
+
+    ips = [str(ip) for ip in subnet.hosts()]
+    results = []
+
+    def check(ip):
+
+        # Skip local machine
+        if local_ip and ip == local_ip:
+            return None
+
+        try:
+            for port in (445, 139):
+
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+
+                    s.settimeout(timeout)
+
+                    if s.connect_ex((ip, port)) == 0:
+
+                        share_info = smb_probe_shares(ip)
+
+                        return {
+                            "ip": ip,
+                            "port": port,
+                            "type": "SMB" if port == 445 else "NETBIOS",
+                            "shares": share_info["shares"],
+                            "anonymous": share_info["anonymous"]
+                        }
+
+        except Exception:
+            pass
+
+        return None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as ex:
+        for res in ex.map(check, ips):
+            if res:
+                results.append(res)
+
+    return results
+
 # ======= Print Setup =======
 def test_print(
     subnet: Optional[ipaddress.IPv4Network] = None,
@@ -947,9 +1101,9 @@ def show_menu():
 
     print(f"{'scan -L':10} LAN scan (devices and ports)")
     print(f"{'scan -R':10} Custom IP range scan")
-    print(f"{'scan -S':10} HTTP service scan (LAN only)")
-    print(f"{'scan -T':10} Device traffic inspection")
-
+    print(f"{'scan -S':10} SMB / NetBIOS scan (LAN only)")
+    print(f"{'scan -T':10} HTTP service scan (LAN only)")
+    print(f"{'scan -X':10} Device traffic inspection")
     print(f"{'help':10} Show menu")
     print(f"{'exit':10} Exit")
     
@@ -958,7 +1112,7 @@ show_menu()
 while True:
     scan_mode = input("\n> ").strip().lower()
 
-    if scan_mode not in {"scan -l", "scan -r", "scan -s", "scan -t", "help", "exit", ""}:
+    if scan_mode not in {"scan -l", "scan -r", "scan -s", "scan -t", "scan -x", "help", "exit", ""}:
         print("Invalid command!")
         continue
 
@@ -1099,12 +1253,60 @@ while True:
     elif scan_mode == "scan -s":
 
         if not subnet:
-            print("No subnet detected.")
+            logging.info("No subnet detected.")
+            continue
+        logging.info("")
+        logging.info("Scanning SMB / NetBIOS services...")
+
+        spinner = Spinner("Running SMB scan")
+        spinner.start()
+        start = time.time()
+
+        try:
+            results = smb_scan(subnet, local_ip=local)
+
+        finally:
+            spinner.stop()
+
+        elapsed = time.time() - start
+
+        if results:
+            logging.info(f"Found {len(results)} SMB-capable devices:")
+
+            for r in results:
+                logging.info("")
+                logging.info(f"[{r['type']}] {r['ip']} → port {r['port']}")
+
+                if r["shares"]:
+
+                    for share in r["shares"]:
+
+                        logging.info(f"UNC Share: \\\\{r['ip']}\\{share}")
+
+                        if r["anonymous"]:
+                            logging.info("Exposure : Anonymous Share")
+                            logging.info("Enumeration : Successful")
+                        else:
+                            logging.info("Exposure : Share Detected")
+                            logging.info("Enumeration : Partial")
+
+                else:
+
+                    logging.info("Exposure : SMB Reachable")
+                    logging.info("Enumeration : Denied")
+
+        else:
+            logging.info("No SMB devices found.")
+
+    elif scan_mode == "scan -t":
+
+        if not subnet:
+            logging.info("No subnet detected.")
             continue
 
         ips = [str(ip) for ip in subnet.hosts()]
 
-        print(f"\nPre-filtering {len(ips)} hosts (ICMP + ARP)...")
+        logging.info(f"\nPre-filtering {len(ips)} hosts (ICMP + ARP)...")
 
         alive_ips = set()
         ip_mac = _parse_arp_table()
@@ -1122,12 +1324,13 @@ while True:
 
         alive_ips = list(alive_ips)
 
-        print(f"Alive hosts: {len(alive_ips)}\n")
+        logging.info(f"Alive hosts: {len(alive_ips)}\n")
 
         results = []
 
         spinner = Spinner("Scanning HTTP services")
         spinner.start()
+        start = time.time()
 
         try:
             def check(ip):
@@ -1149,7 +1352,7 @@ while True:
         for r in results:
             logging.info(f"[HTTP] {r['ip']} → {r['status']} {r['server']}")
             
-    elif scan_mode == "scan -t":
+    elif scan_mode == "scan -x":
         # --- Ask for timeout ---
         try:
             timeout = int(input("\nSelect timeout (10-300 seconds, 0 = unlimited): ").strip())
