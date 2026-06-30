@@ -67,18 +67,6 @@ If you trust this application, you may need to add it as an exception in your an
 <a name="installation"></a>
 ## 💾 Installation
 
-### 💻 Windows EXE
-
-Download the latest **[release](https://github.com/mennylevinski/uspector-net/releases)**. Extract the archive, then double-click **Uspector.exe**.
-
-> No Python installation required (portable executable)
-
-If Microsoft Defender SmartScreen appears:
-- Click More info
-- Click Run anyway
-
----
-
 ### 🐍 Cross-platform
 
 #### 1️⃣ Requirements
