@@ -1,6 +1,6 @@
 <div align="center">
 
-# Uspector Network Scanner
+# Scan Net
 
 </div>
 
@@ -16,7 +16,7 @@
 <a name="overview"></a>
 
 
-**Uspector** is a lightweight, cross-platform Python network scanner that enables device discovery and open port detection across local IPv4 subnets, including Wi-Fi and Ethernet.
+**Scan Net** is a lightweight, cross-platform Python network scanner that enables device discovery and open port detection across local IPv4 subnets, including Wi-Fi and Ethernet.
 Built for ethical diagnostics, security awareness, and administrative auditing, it is suitable for both personal and organizational use.
 
 If you would like to contribute, I would greatly appreciate it. Please read the [contribution guidelines](CONTRIBUTING.md).
@@ -58,7 +58,7 @@ Use responsibly and in compliance with your local governance.
 
 ## 📌 Safety Notice
 
-**Uspector Network Scanner** is safe to use when downloaded from the official source.
+**Scan Net** is safe to use when downloaded from the official source.
 Because the application performs network discovery and scanning, some antivirus products may incorrectly flag or restrict its execution. This is a common false positive for legitimate network diagnostic tools.
 If you trust this application, you may need to add it as an exception in your antivirus software.
 
@@ -88,7 +88,7 @@ If you trust this application, you may need to add it as an exception in your an
 ## 📁 Project Structure
 
 ```bash
-uspector-net/             # Main project folder
+scan-net/             # Main project folder
 │
 ├── media/                # Images, diagrams, UI assets
 │
