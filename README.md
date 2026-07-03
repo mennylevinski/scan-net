@@ -1,6 +1,6 @@
 <div align="center">
 
-# Scan Net
+# Net Scanner
 
 </div>
 
@@ -16,7 +16,7 @@
 <a name="overview"></a>
 
 
-**Scan Net** is a lightweight, cross-platform Python network scanner that enables device discovery and open port detection across local IPv4 subnets, including Wi-Fi and Ethernet.
+**Net Scanner** is a lightweight, cross-platform Python network scanner that enables device discovery and open port detection across local IPv4 subnets, including Wi-Fi and Ethernet.
 Built for ethical diagnostics, security awareness, and administrative auditing, it is suitable for both personal and organizational use.
 
 If you would like to contribute, I would greatly appreciate it. Please read the [contribution guidelines](CONTRIBUTING.md).
@@ -88,7 +88,7 @@ If you trust this application, you may need to add it as an exception in your an
 ## 📁 Project Structure
 
 ```bash
-scan-net/             # Main project folder
+net-scanner/             # Main project folder
 │
 ├── media/                # Images, diagrams, UI assets
 │
