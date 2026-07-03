@@ -2,7 +2,7 @@
 
 ## 🔐 Supported Versions
 
-The following versions of **Uspector Network Scanner** are supported:
+The following versions of **Net Scanner** are supported:
 
 | Version        | Supported |
 | -------------- | --------- |
@@ -26,7 +26,7 @@ If you discover a security vulnerability, please report it responsibly.
 Please report security issues by:
 
 * Opening a **private security advisory** on GitHub (preferred), or
-* Contacting the project maintainer directly: info@uspector.net
+* Contacting the project maintainer directly: info@secuditor.com
 
 When reporting, include as much detail as possible:
 
