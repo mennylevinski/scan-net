@@ -1,4 +1,4 @@
-# Contributing to Net Scanner Network Scanner
+# Contributing to Net Scanner
 
 Thank you for your interest in contributing to **Net Scanner**, Contributions of all kinds are welcome, code, documentation, testing, ideas, and feedback.
 
