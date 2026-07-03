@@ -35,15 +35,15 @@ Licensed under the [MIT License](LICENSE).
 - **Basic Traffic Inspection** module, real-time monitoring of active TCP connections
 - **Logging system**, exportable log file (TXT format) for more detailed output
 
-For a detailed list of all common ports scanned by Uspector, see [PORTS.md](PORTS.md)
+For a detailed list of all common ports scanned by Net Scanner, see [PORTS.md](PORTS.md)
 
 ---
 
 ## 📸 Kali Linux
 
-![Uspector – LAN Scanning](media/uspector_screenshot1.png)
+![Net Scanner – LAN Scanning](media/net_scanner_screenshot1.png)
 
-![Uspector – Traffic Inspection](media/uspector_screenshot2.png)
+![Net Scanner – Traffic Inspection](media/net_scanner_screenshot2.png)
 
 ---
 
@@ -75,7 +75,7 @@ If you trust this application, you may need to add it as an exception in your an
 - Dependencies: `pip install psutil`, `pip install requests`
 
 #### 2️⃣ Script
-- Download the script [uspector_net.py](src/uspector_net.py)
+- Download the script [net_scanner.py](src/net_scanner.py)
 
 #### 3️⃣ Run
 - Windows: `python uspector_net.py`
