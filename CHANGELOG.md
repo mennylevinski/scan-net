@@ -1,5 +1,5 @@
 # Changelog
-All notable changes to **Uspector Network Scanner** are documented in this file.
+All notable changes to **Scan Net** are documented in this file.
 
 ---
 ## [1.8.0] – 2026-06-14 Latest
