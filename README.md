@@ -1,6 +1,6 @@
 <div align="center">
 
-# Open Net Scanner
+# Vigil Net Scanner
 
 </div>
 
@@ -16,7 +16,7 @@
 <a name="overview"></a>
 
 
-**Open Net Scanner** is a lightweight, cross-platform Python network scanner that enables device discovery and open port detection across local IPv4 subnets, including Wi-Fi and Ethernet.
+**Vigil Net Scanner** is a lightweight, cross-platform Python network scanner that enables device discovery and open port detection across local IPv4 subnets, including Wi-Fi and Ethernet.
 Built for ethical diagnostics, security awareness, and administrative auditing, it is suitable for both personal and organizational use.
 
 If you would like to contribute, I would greatly appreciate it. Please read the [contribution guidelines](CONTRIBUTING.md).
@@ -58,7 +58,7 @@ Use responsibly and in compliance with your local governance.
 
 ## 📌 Safety Notice
 
-**Open Net Scanner** is safe to use when downloaded from the official source.
+**Vigil Net Scanner** is safe to use when downloaded from the official source.
 Because the application performs network discovery and scanning, some antivirus products may incorrectly flag or restrict its execution. This is a common false positive for legitimate network diagnostic tools.
 If you trust this application, you may need to add it as an exception in your antivirus software.
 
