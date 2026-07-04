@@ -88,7 +88,7 @@ If you trust this application, you may need to add it as an exception in your an
 ## 📁 Project Structure
 
 ```bash
-cor_net_scanner/             # Main project folder
+core_net_scanner/             # Main project folder
 │
 ├── media/                # Images, diagrams, UI assets
 │
