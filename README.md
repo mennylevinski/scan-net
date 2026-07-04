@@ -97,7 +97,7 @@ core_net_scanner/             # Main project folder
 ├── CHANGELOG.md          # Version history
 ├── CONTRIBUTING.md       # Contribution guidelines
 ├── LICENSE               # Project license
-├── PORTS.md              # List of all common ports scanned by the app
+├── PORTS.md              # List of all common ports scanned by the tool
 ├── README.md             # Main documentation
 ├── SECURITY.md           # Security policy
 └── .gitignore
