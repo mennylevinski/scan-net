@@ -32,7 +32,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from typing import List, Dict, Iterable, Optional
 
-version = "1.8.0"
+version = "1.9.0"
 
 try:
     from VersionChecker import fetch_latest_version
@@ -195,7 +195,7 @@ class Spinner:
         for dots in itertools.cycle(["", ".", "..", "...", "....", "....."]):
             if self._stop_event.is_set():
                 break
-            print(f"\r{self.message}{dots}   ", end="", flush=True)
+            print(f"\r{dots}   ", end="", flush=True)
             time.sleep(0.5)
             
         print("\r" + " " * (len(self.message) + 10) + "\r", end="", flush=True)
@@ -1257,7 +1257,7 @@ while True:
             logging.info("No subnet detected.")
             continue
         logging.info("")
-        logging.info("Scanning SMB / NetBIOS services...")
+        logging.info("Scanning SMB / NetBIOS services...\n")
 
         spinner = Spinner("Running SMB scan")
         spinner.start()
@@ -1307,7 +1307,8 @@ while True:
 
         ips = [str(ip) for ip in subnet.hosts()]
 
-        logging.info(f"\nPre-filtering {len(ips)} hosts (ICMP + ARP)...")
+        logging.info("")
+        logging.info(f"Pre-filtering {len(ips)} hosts (ICMP + ARP)...\n")
 
         alive_ips = set()
         ip_mac = _parse_arp_table()
